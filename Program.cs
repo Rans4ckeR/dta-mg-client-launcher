@@ -118,16 +118,17 @@ internal sealed class Program
                         dxFailFile.Delete();
                         oglFailFile.Delete();
                         AutoRun();
-                        break;
+                        return;
                     case DialogResult.Yes:
                         RunXNA();
-                        break;
+                        return;
                     case DialogResult.Cancel:
                         return;
                 }
             }
 
             RunOGL();
+            return;
         }
 
         RunDX();
