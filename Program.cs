@@ -32,16 +32,12 @@ internal sealed class Program
         { (Architecture.Arm64, true), DotNetArm64DesktopRuntimeDownloadLink }
     }.AsReadOnly();
 
-    private static bool automaticX86Fallback;
-
     [STAThread]
     private static void Main(string[] args)
     {
         try
         {
             ApplicationConfiguration.Initialize();
-
-            automaticX86Fallback = !args.Any(q => q.Equals("-64Bit", StringComparison.OrdinalIgnoreCase));
 
             if (args.Any(q => q.Equals("-XNA", StringComparison.OrdinalIgnoreCase)))
             {
@@ -172,12 +168,6 @@ internal sealed class Program
 
     private static FileInfo CheckAndRetrieveDotNetHost(Architecture architecture, bool runDesktop)
     {
-        if (architecture is not Architecture.X86 && automaticX86Fallback
-            && ((runDesktop && !IsDotNetDesktopInstalled(architecture)) || !IsDotNetCoreInstalled(architecture)))
-        {
-            architecture = Architecture.X86;
-        }
-
         if (runDesktop && !IsDotNetDesktopInstalled(architecture))
         {
             string missingComponent = FormattableString.Invariant($"'.NET Desktop Runtime' version {DotNetMajorVersion} for platform {architecture}");
