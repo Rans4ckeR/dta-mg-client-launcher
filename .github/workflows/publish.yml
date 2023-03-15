@@ -4,112 +4,112 @@ on:
 permissions:
   contents: write
 jobs:
-  publish:
+  calculate-version:
+    name: Calculate Version
     runs-on: windows-latest
-    strategy:
-      matrix:
-        include:
-        - assemblyname: 'CnCNet.LauncherStub'
-          iconurl: ''
-        - assemblyname: 'CnCNetYRLauncher'
-          iconurl: 'https://raw.githubusercontent.com/CnCNet/cncnet-yr-client-package/develop/package/Resources/clienticon.ico'
-        - assemblyname: 'DTA'
-          iconurl: 'https://raw.githubusercontent.com/Rampastring/dta-xna-cncnet-client/master/DXMainClient/clienticon.ico'
-        - assemblyname: 'REClient'
-          iconurl: 'https://www.riseoftheeastmod.com/updates/Resources/clienticon.ico'
-        - assemblyname: 'TiberianSun'
-          iconurl: 'https://raw.githubusercontent.com/CnCNet/cncnet-ts-client-package/master/Resources/clienticon.ico'
-        - assemblyname: 'TiberianDawn'
-          iconurl: 'https://cdn.discordapp.com/attachments/1051967431020654622/1051967960857718825/TiberianDawn.ico'
-        - assemblyname: 'SoleSurvivor'
-          iconurl: 'https://cdn.discordapp.com/attachments/1051967431020654622/1051967960098549851/tomsons_SoleIcon.ico'
-        - assemblyname: 'TwistedInsurrection'
-          iconurl: 'https://ti.ppmsite.com/updates/Resources/clienticon.ico'
-        - assemblyname: 'MentalOmegaClient'
-          iconurl: 'https://mentalomega.com/game/update/Resources/clienticon.ico'
-        - assemblyname: 'RRLauncher'
-          iconurl: 'https://cdn.discordapp.com/attachments/194153198284570624/1085557958970200234/redresurrection.ico'
-        - assemblyname: 'CnCReloadedClient'
-          iconurl: 'https://cncreloaded.com/cncr_updates/Resources/clienticon.ico'
-        - assemblyname: 'RedAlert'
-          iconurl: 'https://cdn.discordapp.com/attachments/1051967431020654622/1051967960480239766/RedAlert.ico'
-        - assemblyname: 'Dune2000'
-          iconurl: 'https://cdn.discordapp.com/attachments/1051967431020654622/1051967961172295700/dune2000.ico'
-        - assemblyname: 'The Second Tiberium War'
-          iconurl: 'https://cdn.discordapp.com/attachments/194153198284570624/1085515125634629762/The_Second_Tiberium_War.ico'
-        - assemblyname: 'FWLauncher'
-          iconurl: 'https://cdn.discordapp.com/attachments/194153198284570624/1085517782575235092/finalwar.ico'
+    outputs:
+      AssemblySemVer: ${{ steps.gitversion.outputs.AssemblySemVer }}
+      AssemblySemFileVer: ${{ steps.gitversion.outputs.AssemblySemFileVer }}
+      InformationalVersion: ${{ steps.gitversion.outputs.InformationalVersion }}
+      SemVer: ${{ steps.gitversion.outputs.SemVer }}
+      PreReleaseTag: ${{ steps.gitversion.outputs.PreReleaseTag }}
     steps:
       - name: Checkout
         uses: actions/checkout@main
         with:
           fetch-depth: 0
-
+      - name: Install GitVersion
+        uses: gittools/actions/gitversion/setup@main
+        with:
+          versionSpec: '5.x'
+      - name: Determine Version
+        id: gitversion
+        uses: gittools/actions/gitversion/execute@main
+  publish:
+    runs-on: windows-latest
+    needs: calculate-version
+    env:
+      AssemblySemVer: ${{ needs.calculate-version.outputs.AssemblySemVer }}
+      AssemblySemFileVer: ${{ needs.calculate-version.outputs.AssemblySemFileVer }}
+      InformationalVersion: ${{ needs.calculate-version.outputs.InformationalVersion }}
+      SemVer: ${{ needs.calculate-version.outputs.SemVer }}
+    strategy:
+      matrix:
+        runtime: [win-x86, win-x64, win-arm64]
+        assemblyname: [CnCNet.LauncherStub, CnCNetYRLauncher, DTA, REClient, TiberianSun, TiberianDawn, SoleSurvivor, TwistedInsurrection, MentalOmegaClient, RRLauncher, CnCReloadedClient, RedAlert, Dune2000, The Second Tiberium War, FWLauncher]
+        include:
+          - iconurl: https://raw.githubusercontent.com/CnCNet/cncnet-yr-client-package/develop/package/Resources/clienticon.ico
+            assemblyname: CnCNetYRLauncher
+          - iconurl: https://raw.githubusercontent.com/Rampastring/dta-xna-cncnet-client/master/DXMainClient/clienticon.ico
+            assemblyname: DTA
+          - iconurl: https://www.riseoftheeastmod.com/updates/Resources/clienticon.ico
+            assemblyname: REClient
+          - iconurl: https://raw.githubusercontent.com/CnCNet/cncnet-ts-client-package/master/Resources/clienticon.ico
+            assemblyname: TiberianSun
+          - iconurl: https://cdn.discordapp.com/attachments/1051967431020654622/1051967960857718825/TiberianDawn.ico
+            assemblyname: TiberianDawn
+          - iconurl: https://cdn.discordapp.com/attachments/1051967431020654622/1051967960098549851/tomsons_SoleIcon.ico
+            assemblyname: SoleSurvivor
+          - iconurl: https://ti.ppmsite.com/updates/Resources/clienticon.ico
+            assemblyname: TwistedInsurrection
+          - iconurl: https://mentalomega.com/game/update/Resources/clienticon.ico
+            assemblyname: MentalOmegaClient
+          - iconurl: https://cdn.discordapp.com/attachments/194153198284570624/1085557958970200234/redresurrection.ico
+            assemblyname: RRLauncher
+          - iconurl: https://cncreloaded.com/cncr_updates/Resources/clienticon.ico
+            assemblyname: CnCReloadedClient
+          - iconurl: https://cdn.discordapp.com/attachments/1051967431020654622/1051967960480239766/RedAlert.ico
+            assemblyname: RedAlert
+          - iconurl: https://cdn.discordapp.com/attachments/1051967431020654622/1051967961172295700/dune2000.ico
+            assemblyname: Dune2000
+          - iconurl: https://cdn.discordapp.com/attachments/194153198284570624/1085515125634629762/The_Second_Tiberium_War.ico
+            assemblyname: The Second Tiberium War
+          - iconurl: https://cdn.discordapp.com/attachments/194153198284570624/1085517782575235092/finalwar.ico
+            assemblyname: FWLauncher
+    steps:
+      - name: Checkout
+        uses: actions/checkout@main
       - name: Set Icon
         if: ${{ matrix.iconurl != '' }}
         run: curl ${{ matrix.iconurl }} -o mainclienticon.ico
-          
       - name: Setup .NET Core SDK
         uses: actions/setup-dotnet@main
         with:
           dotnet-version: '7.x.x'
-
-      - name: Install GitVersion
-        uses: gittools/actions/gitversion/setup@main
-        with:
-          versionSpec: '5.x'
-
-      - name: Determine Version
-        uses: gittools/actions/gitversion/execute@main
-
       - name: Publish With Icon
         if: ${{ matrix.iconurl != '' }}
-        run: dotnet publish --configuration Release --no-self-contained -p:PublishSingleFile=true -r win-x86 -p:DebugType=embedded -p:AssemblyName="${{ matrix.assemblyname }}" -p:ApplicationIcon=mainclienticon.ico -p:AssemblyVersion=$env:GitVersion_AssemblySemVer -p:FileVersion=$env:GitVersion_AssemblySemFileVer -p:InformationalVersion=$env:GitVersion_InformationalVersion
-
+        run: dotnet publish --configuration Release --no-self-contained -p:PublishSingleFile=true -r ${{ matrix.runtime }} -p:DebugType=embedded -p:AssemblyName="${{ matrix.assemblyname }}" -p:ApplicationIcon=mainclienticon.ico -p:AssemblyVersion=$AssemblySemVer -p:FileVersion=$AssemblySemFileVer -p:InformationalVersion=$InformationalVersion
       - name: Publish Without Icon
         if: ${{ matrix.iconurl == '' }}
-        run: dotnet publish --configuration Release --no-self-contained -p:PublishSingleFile=true -r win-x86 -p:DebugType=embedded -p:AssemblyName="${{ matrix.assemblyname }}" -p:AssemblyVersion=$env:GitVersion_AssemblySemVer -p:FileVersion=$env:GitVersion_AssemblySemFileVer -p:InformationalVersion=$env:GitVersion_InformationalVersion
-      
+        run: dotnet publish --configuration Release --no-self-contained -p:PublishSingleFile=true -r ${{ matrix.runtime }} -p:DebugType=embedded -p:AssemblyName="${{ matrix.assemblyname }}" -p:AssemblyVersion=$AssemblySemVer -p:FileVersion=$AssemblySemFileVer -p:InformationalVersion=$InformationalVersion
       - name: Zip
-        run: 7z a -r "${{ format('{0}-v{1}-net7.0-windows-x86.zip', matrix.assemblyname, env.GitVersion_SemVer) }}" "./bin/Release/net7.0-windows/win-x86/publish/*.*"
-
-      - name: Upload Artifact
+        run: 7z a -r "${{ format('{0}-v{1}-net7.0-windows-{2}.zip', matrix.assemblyname, env.SemVer, matrix.runtime) }}" "./bin/Release/net7.0-windows/${{ matrix.runtime }}/publish/*.*"
+      - name: Upload Artifacts
         uses: actions/upload-artifact@main
         with:
-          name: ${{ matrix.assemblyname }}
-          path: ${{ format('{0}-v{1}-net7.0-windows-x86.zip', matrix.assemblyname, env.GitVersion_SemVer) }}
+          name: ${{ matrix.assemblyname }}-${{ matrix.runtime }}
+          path: ${{ format('{0}-v{1}-net7.0-windows-{2}.zip', matrix.assemblyname, env.SemVer, matrix.runtime) }}
           if-no-files-found: error
-  
   release:
-    needs: publish
+    needs: [calculate-version, publish]
+    env:
+      PreReleaseTag: ${{ needs.calculate-version.outputs.PreReleaseTag }}
+      SemVer: ${{ needs.calculate-version.outputs.SemVer }}
     runs-on: windows-latest
     steps:
       - name: Checkout
         uses: actions/checkout@main
-        with:
-          fetch-depth: 0
-
-      - name: Install GitVersion
-        uses: gittools/actions/gitversion/setup@main
-        with:
-          versionSpec: '5.x'
-
-      - name: Determine Version
-        uses: gittools/actions/gitversion/execute@main
-
-      - name: Download Artifact
+      - name: Download Artifacts
         uses: actions/download-artifact@main
         with:
           path: ./artifacts
-
       - name: Prerelease
-        if: ${{ env.GitVersion_PreReleaseTag != '' }}
-        run: gh release create ${{ format('v{0}', env.GitVersion_SemVer) }} (get-item ./artifacts/*/*.zip) --generate-notes --target ${{ github.sha }} --prerelease
+        if: ${{ env.PreReleaseTag != '' }}
+        run: gh release create ${{ format('v{0}', env.SemVer) }} (get-item ./artifacts/*/*.zip) --generate-notes --target ${{ github.sha }} --prerelease
         env:
           GH_TOKEN: ${{ github.token }}
-          
       - name: Release
-        if: ${{ env.GitVersion_PreReleaseTag == '' }}
-        run: gh release create ${{ format('v{0}', env.GitVersion_SemVer) }} (get-item ./artifacts/*/*.zip) --generate-notes --target ${{ github.sha }}
+        if: ${{ env.PreReleaseTag == '' }}
+        run: gh release create ${{ format('v{0}', env.SemVer) }} (get-item ./artifacts/*/*.zip) --generate-notes --target ${{ github.sha }}
         env:
           GH_TOKEN: ${{ github.token }}
