@@ -79,6 +79,11 @@ jobs:
     needs: publish
     runs-on: windows-latest
     steps:
+      - name: Checkout
+        uses: actions/checkout@main
+        with:
+          fetch-depth: 0
+
       - name: Install GitVersion
         uses: gittools/actions/gitversion/setup@main
         with:
