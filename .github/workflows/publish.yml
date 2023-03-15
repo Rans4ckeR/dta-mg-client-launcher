@@ -102,9 +102,6 @@ jobs:
         with:
           path: ./artifacts
 
-      - name: Display structure of downloaded files
-        run: ls -R
-
       - name: Prerelease
         if: ${{ env.GitVersion_PreReleaseTag != '' }}
         run: gh release create ${{ format('v{0}', env.GitVersion_SemVer) }} (get-item ./artifacts/*/*.zip) --generate-notes --target ${{ github.sha }} --prerelease
