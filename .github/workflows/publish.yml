@@ -77,6 +77,7 @@ jobs:
         uses: actions/upload-artifact@main
         with:
           name: ${{ matrix.assemblyname }}
+          path: ${{ format('{0}-v{1}-net7.0-windows-x86.zip', matrix.assemblyname, env.GitVersion_SemVer) }}
           if-no-files-found: error
   
   release:
