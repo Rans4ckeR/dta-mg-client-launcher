@@ -32,7 +32,7 @@ jobs:
       AssemblySemVer: ${{ needs.calculate-version.outputs.AssemblySemVer }}
       AssemblySemFileVer: ${{ needs.calculate-version.outputs.AssemblySemFileVer }}
       InformationalVersion: ${{ needs.calculate-version.outputs.InformationalVersion }}
-      SEMVER: ${{ needs.calculate-version.outputs.SemVer }}
+      SemVer: ${{ needs.calculate-version.outputs.SemVer }}
     strategy:
       matrix:
         runtime: [win-x86, win-x64, win-arm64]
@@ -83,18 +83,18 @@ jobs:
         if: ${{ matrix.iconurl == '' }}
         run: dotnet publish --configuration Release --no-self-contained -p:PublishSingleFile=true -r ${{ matrix.runtime }} -p:DebugType=embedded -p:AssemblyName="${{ matrix.assemblyname }}" -p:AssemblyVersion=$AssemblySemVer -p:FileVersion=$AssemblySemFileVer -p:InformationalVersion=$InformationalVersion
       - name: Zip
-        run: 7z a -r "${{ format('{0}-v{1}-net7.0-windows-{2}.zip', matrix.assemblyname, $SEMVER, matrix.runtime) }}" "./bin/Release/net7.0-windows/${{ matrix.runtime }}/publish/*.*"
+        run: 7z a -r "${{ format('{0}-v{1}-net7.0-windows-{2}.zip', matrix.assemblyname, env.SemVer, matrix.runtime) }}" "./bin/Release/net7.0-windows/${{ matrix.runtime }}/publish/*.*"
       - name: Upload Artifacts
         uses: actions/upload-artifact@main
         with:
           name: ${{ matrix.assemblyname }}-${{ matrix.runtime }}
-          path: ${{ format('{0}-v{1}-net7.0-windows-{2}.zip', matrix.assemblyname, $SEMVER, matrix.runtime) }}
+          path: ${{ format('{0}-v{1}-net7.0-windows-{2}.zip', matrix.assemblyname, env.SemVer, matrix.runtime) }}
           if-no-files-found: error
   release:
     needs: [calculate-version, publish]
     env:
       PreReleaseTag: ${{ needs.calculate-version.outputs.PreReleaseTag }}
-      SEMVER: ${{ needs.calculate-version.outputs.SemVer }}
+      SemVer: ${{ needs.calculate-version.outputs.SemVer }}
     runs-on: windows-latest
     steps:
       - name: Download Artifacts
@@ -103,11 +103,11 @@ jobs:
           path: ./artifacts
       - name: Prerelease
         if: ${{ PreReleaseTag != '' }}
-        run: gh release create ${{ format('v{0}', $SEMVER) }} (get-item ./artifacts/*/*.zip) --generate-notes --target ${{ github.sha }} --prerelease
+        run: gh release create ${{ format('v{0}', env.SemVer) }} (get-item ./artifacts/*/*.zip) --generate-notes --target ${{ github.sha }} --prerelease
         env:
           GH_TOKEN: ${{ github.token }}
       - name: Release
         if: ${{ PreReleaseTag == '' }}
-        run: gh release create ${{ format('v{0}', $SEMVER) }} (get-item ./artifacts/*/*.zip) --generate-notes --target ${{ github.sha }}
+        run: gh release create ${{ format('v{0}', env.SemVer) }} (get-item ./artifacts/*/*.zip) --generate-notes --target ${{ github.sha }}
         env:
           GH_TOKEN: ${{ github.token }}
