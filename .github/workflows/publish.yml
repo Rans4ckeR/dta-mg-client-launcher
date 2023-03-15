@@ -32,7 +32,7 @@ jobs:
       AssemblySemVer: ${{ needs.calculate-version.outputs.AssemblySemVer }}
       AssemblySemFileVer: ${{ needs.calculate-version.outputs.AssemblySemFileVer }}
       InformationalVersion: ${{ needs.calculate-version.outputs.InformationalVersion }}
-      SemVer: ${{ needs.calculate-version.outputs.SemVer }}
+      SEMVER: ${{ needs.calculate-version.outputs.SemVer }}
     strategy:
       matrix:
         runtime: [win-x86, win-x64, win-arm64]
@@ -94,7 +94,7 @@ jobs:
     needs: [calculate-version, publish]
     env:
       PreReleaseTag: ${{ needs.calculate-version.outputs.PreReleaseTag }}
-      SemVer: ${{ needs.calculate-version.outputs.SemVer }}
+      SEMVER: ${{ needs.calculate-version.outputs.SemVer }}
     runs-on: windows-latest
     steps:
       - name: Download Artifacts
