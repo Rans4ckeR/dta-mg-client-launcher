@@ -74,7 +74,7 @@ jobs:
         uses: actions/upload-artifact@main
         with:
           name: ${{ format('{0}-v{1}-net7.0-windows-x86.zip', matrix.assemblyname, env.GitVersion_SemVer) }}
-          path: ./bin/Release/net7.0-windows/win-x86/publish/*.*
+          path: ./bin/Release/net7.0-windows/win-x86/publish
           if-no-files-found: error
   
   release:
