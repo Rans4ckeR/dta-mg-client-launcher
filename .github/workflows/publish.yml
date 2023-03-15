@@ -68,12 +68,26 @@ jobs:
       - name: Zip
         run: 7z a -r ${{ format('{0}-v{1}-net7.0-windows-x86.zip', matrix.assemblyname, env.GitVersion_SemVer) }} ./bin/Release/net7.0-windows/win-x86/publish/*.*
 
+      - name: Upload Artifact
+        uses: actions/upload-artifact@main
+        with:
+          name: ${{ matrix.assemblyname }}
+          path: ./*.zip
+          if-no-files-found: error
+  
+  release:
+    needs: publish
+    runs-on: windows-latest
+    steps:
+      - name: Download Artifact
+        uses: actions/download-artifact@main
+
       - name: Prerelease
         if: ${{ env.GitVersion_PreReleaseTag != '' }}
         run: gh release create ${{ format('v{0}', env.GitVersion_SemVer) }} (get-item *.zip) --generate-notes --target ${{ github.sha }} --prerelease
         env:
           GH_TOKEN: ${{ github.token }}
-
+          
       - name: Release
         if: ${{ env.GitVersion_PreReleaseTag == '' }}
         run: gh release create ${{ format('v{0}', env.GitVersion_SemVer) }} (get-item *.zip) --generate-notes --target ${{ github.sha }}
