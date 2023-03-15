@@ -79,6 +79,14 @@ jobs:
     needs: publish
     runs-on: windows-latest
     steps:
+      - name: Install GitVersion
+        uses: gittools/actions/gitversion/setup@main
+        with:
+          versionSpec: '5.x'
+
+      - name: Determine Version
+        uses: gittools/actions/gitversion/execute@main
+
       - name: Download Artifact
         uses: actions/download-artifact@main
 
