@@ -6,7 +6,7 @@ on:
       iconurl:
         description: 'Icon URL'
         required: true
-        default: 'https://raw.githubusercontent.com/Rampastring/dta-xna-cncnet-client/master/DXMainClient/clienticon.ico' 
+        default: 'https://raw.githubusercontent.com/Rampastring/dta-xna-cncnet-client/master/DXMainClient/clienticon.ico'
         type: string
 
 jobs:
@@ -35,7 +35,7 @@ jobs:
       uses: gittools/actions/gitversion/execute@main
 
     - name: Publish
-      run: dotnet publish DTALauncherStub.csproj --configuration Release --no-self-contained -p:PublishSingleFile=true -r win-x86 -p:DebugType=embedded -p:AssemblyVersion=$env:GitVersion_AssemblySemVer -p:FileVersion=$env:GitVersion_AssemblySemFileVer -p:InformationalVersion=$env:GitVersion_InformationalVersion
+      run: dotnet publish CnCNet.LauncherStub.csproj --configuration Release --no-self-contained -p:PublishSingleFile=true -r win-x86 -p:DebugType=embedded -p:ApplicationIcon=mainclienticon.ico -p:AssemblyVersion=$env:GitVersion_AssemblySemVer -p:FileVersion=$env:GitVersion_AssemblySemFileVer -p:InformationalVersion=$env:GitVersion_InformationalVersion
 
     - uses: actions/upload-artifact@main
       name: Upload Artifacts

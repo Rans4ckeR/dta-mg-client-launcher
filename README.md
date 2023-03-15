@@ -19,3 +19,6 @@ Do not autoselect a version, run the WinForms XNA client:
 ```
 -XNA
 ```
+## Custom icon
+- Online: The publishcustomicon workflow, which takes an icon URL as input, can be used to directly publish a custom launcher.
+- Offline: The CnCNet.LauncherStub.exe release can be downloaded and modified using [Rebundler](https://github.com/Rans4ckeR/Rebundler).
