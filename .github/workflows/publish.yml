@@ -28,7 +28,7 @@ jobs:
         - assemblyname: 'MentalOmegaClient'
           iconurl: 'https://mentalomega.com/game/update/Resources/clienticon.ico'
         - assemblyname: 'RRLauncher'
-          iconurl: 'https://cdn.discordapp.com/attachments/194153198284570624/1085518962256777276/redresurrection.ico'
+          iconurl: 'https://cdn.discordapp.com/attachments/194153198284570624/1085557958970200234/redresurrection.ico'
         - assemblyname: 'CnCReloadedClient'
           iconurl: 'https://cncreloaded.com/cncr_updates/Resources/clienticon.ico'
         - assemblyname: 'RedAlert'
