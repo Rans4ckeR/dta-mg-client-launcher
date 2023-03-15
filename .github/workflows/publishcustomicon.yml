@@ -6,7 +6,7 @@ on:
       iconurl:
         description: 'Icon URL'
         required: true
-        default: 'https://raw.githubusercontent.com/Rampastring/dta-xna-cncnet-client/master/DXMainClient/clienticon.ico' 
+        default: 'https://raw.githubusercontent.com/Rampastring/dta-xna-cncnet-client/master/DXMainClient/clienticon.ico'
         type: string
 
 jobs:
