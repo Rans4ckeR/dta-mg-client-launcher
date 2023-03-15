@@ -9,37 +9,36 @@ jobs:
     strategy:
       matrix:
         runtime: [win-x86, win-x64, win-arm64]
+        assemblyname: [CnCNet.LauncherStub, CnCNetYRLauncher, DTA, REClient, TiberianSun, TiberianDawn, SoleSurvivor, TwistedInsurrection, MentalOmegaClient, RRLauncher, CnCReloadedClient, RedAlert, Dune2000, The Second Tiberium War, FWLauncher]
         include:
-        - assemblyname: 'CnCNet.LauncherStub'
-          iconurl: ''
-        - assemblyname: 'CnCNetYRLauncher'
-          iconurl: 'https://raw.githubusercontent.com/CnCNet/cncnet-yr-client-package/develop/package/Resources/clienticon.ico'
-        - assemblyname: 'DTA'
-          iconurl: 'https://raw.githubusercontent.com/Rampastring/dta-xna-cncnet-client/master/DXMainClient/clienticon.ico'
-        - assemblyname: 'REClient'
-          iconurl: 'https://www.riseoftheeastmod.com/updates/Resources/clienticon.ico'
-        - assemblyname: 'TiberianSun'
-          iconurl: 'https://raw.githubusercontent.com/CnCNet/cncnet-ts-client-package/master/Resources/clienticon.ico'
-        - assemblyname: 'TiberianDawn'
-          iconurl: 'https://cdn.discordapp.com/attachments/1051967431020654622/1051967960857718825/TiberianDawn.ico'
-        - assemblyname: 'SoleSurvivor'
-          iconurl: 'https://cdn.discordapp.com/attachments/1051967431020654622/1051967960098549851/tomsons_SoleIcon.ico'
-        - assemblyname: 'TwistedInsurrection'
-          iconurl: 'https://ti.ppmsite.com/updates/Resources/clienticon.ico'
-        - assemblyname: 'MentalOmegaClient'
-          iconurl: 'https://mentalomega.com/game/update/Resources/clienticon.ico'
-        - assemblyname: 'RRLauncher'
-          iconurl: 'https://cdn.discordapp.com/attachments/194153198284570624/1085557958970200234/redresurrection.ico'
-        - assemblyname: 'CnCReloadedClient'
-          iconurl: 'https://cncreloaded.com/cncr_updates/Resources/clienticon.ico'
-        - assemblyname: 'RedAlert'
-          iconurl: 'https://cdn.discordapp.com/attachments/1051967431020654622/1051967960480239766/RedAlert.ico'
-        - assemblyname: 'Dune2000'
-          iconurl: 'https://cdn.discordapp.com/attachments/1051967431020654622/1051967961172295700/dune2000.ico'
-        - assemblyname: 'The Second Tiberium War'
-          iconurl: 'https://cdn.discordapp.com/attachments/194153198284570624/1085515125634629762/The_Second_Tiberium_War.ico'
-        - assemblyname: 'FWLauncher'
-          iconurl: 'https://cdn.discordapp.com/attachments/194153198284570624/1085517782575235092/finalwar.ico'
+          - iconurl: https://raw.githubusercontent.com/CnCNet/cncnet-yr-client-package/develop/package/Resources/clienticon.ico
+            assemblyname: CnCNetYRLauncher
+          - iconurl: https://raw.githubusercontent.com/Rampastring/dta-xna-cncnet-client/master/DXMainClient/clienticon.ico
+            assemblyname: DTA
+          - iconurl: https://www.riseoftheeastmod.com/updates/Resources/clienticon.ico
+            assemblyname: REClient
+          - iconurl: https://raw.githubusercontent.com/CnCNet/cncnet-ts-client-package/master/Resources/clienticon.ico
+            assemblyname: TiberianSun
+          - iconurl: https://cdn.discordapp.com/attachments/1051967431020654622/1051967960857718825/TiberianDawn.ico
+            assemblyname: TiberianDawn
+          - iconurl: https://cdn.discordapp.com/attachments/1051967431020654622/1051967960098549851/tomsons_SoleIcon.ico
+            assemblyname: SoleSurvivor
+          - iconurl: https://ti.ppmsite.com/updates/Resources/clienticon.ico
+            assemblyname: TwistedInsurrection
+          - iconurl: https://mentalomega.com/game/update/Resources/clienticon.ico
+            assemblyname: MentalOmegaClient
+          - iconurl: https://cdn.discordapp.com/attachments/194153198284570624/1085557958970200234/redresurrection.ico
+            assemblyname: RRLauncher
+          - iconurl: https://cncreloaded.com/cncr_updates/Resources/clienticon.ico
+            assemblyname: CnCReloadedClient
+          - iconurl: https://cdn.discordapp.com/attachments/1051967431020654622/1051967960480239766/RedAlert.ico
+            assemblyname: RedAlert
+          - iconurl: https://cdn.discordapp.com/attachments/1051967431020654622/1051967961172295700/dune2000.ico
+            assemblyname: Dune2000
+          - iconurl: https://cdn.discordapp.com/attachments/194153198284570624/1085515125634629762/The_Second_Tiberium_War.ico
+            assemblyname: The Second Tiberium War
+          - iconurl: https://cdn.discordapp.com/attachments/194153198284570624/1085517782575235092/finalwar.ico
+            assemblyname: FWLauncher
     steps:
       - name: Checkout
         uses: actions/checkout@main
