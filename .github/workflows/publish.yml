@@ -63,16 +63,13 @@ jobs:
         uses: gittools/actions/gitversion/execute@main
 
       - name: Publish
-        run: dotnet publish --configuration Release --no-self-contained -p:PublishSingleFile=true -r win-x86 -p:DebugType=embedded -p:AssemblyName="${{ matrix.assemblyname }}" -p:AssemblyVersion=$env:GitVersion_AssemblySemVer -p:FileVersion=$env:GitVersion_AssemblySemFileVer -p:InformationalVersion=$env:GitVersion_InformationalVersion
-
-      - name: Zip
-        run: 7z a -r "${{ format('{0}-v{1}-net7.0-windows-x86.zip', matrix.assemblyname, env.GitVersion_SemVer) }}" "./bin/Release/net7.0-windows/win-x86/publish/*.*"
+        run: dotnet publish --configuration Release --no-self-contained -p:PublishSingleFile=true -r win-x86 -p:DebugType=embedded -p:AssemblyName="${{ matrix.assemblyname }}" -p:ApplicationIcon=mainclienticon.ico -p:AssemblyVersion=$env:GitVersion_AssemblySemVer -p:FileVersion=$env:GitVersion_AssemblySemFileVer -p:InformationalVersion=$env:GitVersion_InformationalVersion
 
       - name: Upload Artifact
         uses: actions/upload-artifact@main
         with:
-          name: ${{ matrix.assemblyname }}
-          path: ./*.zip
+          name: ${{ format('{0}-v{1}-net7.0-windows-x86.zip', matrix.assemblyname, env.GitVersion_SemVer) }}
+          path: ./bin/Release/net7.0-windows/win-x86/publish/*.*
           if-no-files-found: error
   
   release:
