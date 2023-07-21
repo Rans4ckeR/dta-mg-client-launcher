@@ -159,12 +159,17 @@ internal sealed class Program
             Environment.Exit(3);
         }
 
-        using var _ = Process.Start(new ProcessStartInfo
+        var processStartInfo = new ProcessStartInfo
         {
             FileName = dotnetHost.FullName,
             Arguments = "\"" + absolutePath + "\"",
             CreateNoWindow = true
-        });
+        };
+
+        if (!OperatingSystem.IsWindowsVersionAtLeast(6, 2))
+            processStartInfo.EnvironmentVariables["DOTNET_EnableWriteXorExecute"] = "0";
+
+        using var _ = Process.Start(processStartInfo);
     }
 
     private static FileInfo CheckAndRetrieveDotNetHost(Architecture architecture, bool runDesktop)
