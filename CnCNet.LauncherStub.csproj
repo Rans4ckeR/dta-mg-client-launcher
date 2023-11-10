@@ -1,12 +1,12 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net7.0-windows</TargetFramework>
+    <TargetFrameworks>net8.0-windows;net7.0-windows</TargetFrameworks>
     <OutputType>WinExe</OutputType>
     <UseWindowsForms>true</UseWindowsForms>
     <Title>CnCNet Launcher</Title>
     <Description>Launcher for CnCNet Client</Description>
     <Company>CnCNet</Company>
-    <Product>CnCNet Client Launcher</Product>
+    <Product>CnCNet RS Client Launcher</Product>
     <Copyright>Copyright © CnCNet, Rampastring 2011-2023</Copyright>
     <Trademark></Trademark>
     <AssemblyName>CnCNet.LauncherStub</AssemblyName>

@@ -36,6 +36,7 @@ jobs:
     strategy:
       matrix:
         runtime: [win-x86, win-x64, win-arm64]
+        framework: [net8.0-windows, net7.0-windows]
         assemblyname: [CnCNet.LauncherStub, CnCNetYRLauncher, DTA, REClient, TiberianSun, TiberianDawn, SoleSurvivor, TwistedInsurrection, MentalOmegaClient, RRLauncher, CnCReloadedClient, RedAlert, Dune2000, The Second Tiberium War, FWLauncher]
         include:
           - iconurl: https://raw.githubusercontent.com/CnCNet/cncnet-yr-client-package/develop/package/Resources/clienticon.ico
@@ -75,20 +76,20 @@ jobs:
       - name: Setup .NET Core SDK
         uses: actions/setup-dotnet@main
         with:
-          dotnet-version: '7.x.x'
+          dotnet-version: '8.x.x'
       - name: Publish With Icon
         if: ${{ matrix.iconurl != '' }}
-        run: dotnet publish --configuration Release --no-self-contained -p:PublishSingleFile=true -r ${{ matrix.runtime }} -p:DebugType=embedded -p:AssemblyName="${{ matrix.assemblyname }}" -p:ApplicationIcon=mainclienticon.ico -p:AssemblyVersion=$AssemblySemVer -p:FileVersion=$AssemblySemFileVer -p:InformationalVersion=$InformationalVersion
+        run: dotnet publish --configuration Release --no-self-contained -p:PublishSingleFile=true -r ${{ matrix.runtime }} -f ${{ matrix.framework }} -p:DebugType=embedded -p:AssemblyName="${{ matrix.assemblyname }}" -p:ApplicationIcon=mainclienticon.ico -p:AssemblyVersion=$AssemblySemVer -p:FileVersion=$AssemblySemFileVer -p:InformationalVersion=$InformationalVersion
       - name: Publish Without Icon
         if: ${{ matrix.iconurl == '' }}
-        run: dotnet publish --configuration Release --no-self-contained -p:PublishSingleFile=true -r ${{ matrix.runtime }} -p:DebugType=embedded -p:AssemblyName="${{ matrix.assemblyname }}" -p:AssemblyVersion=$AssemblySemVer -p:FileVersion=$AssemblySemFileVer -p:InformationalVersion=$InformationalVersion
+        run: dotnet publish --configuration Release --no-self-contained -p:PublishSingleFile=true -r ${{ matrix.runtime }} -f ${{ matrix.framework }} -p:DebugType=embedded -p:AssemblyName="${{ matrix.assemblyname }}" -p:AssemblyVersion=$AssemblySemVer -p:FileVersion=$AssemblySemFileVer -p:InformationalVersion=$InformationalVersion
       - name: Zip
-        run: 7z a -r "${{ format('{0}-v{1}-net7.0-windows-{2}.zip', matrix.assemblyname, env.SemVer, matrix.runtime) }}" "./bin/Release/net7.0-windows/${{ matrix.runtime }}/publish/*.*"
+        run: 7z a -r "${{ format('{0}-v{1}-{2}-{3}.zip', matrix.assemblyname, env.SemVer, matrix.framework, matrix.runtime) }}" "./bin/Release/${{ matrix.framework }}/${{ matrix.runtime }}/publish/*.*"
       - name: Upload Artifacts
         uses: actions/upload-artifact@main
         with:
-          name: ${{ matrix.assemblyname }}-${{ matrix.runtime }}
-          path: ${{ format('{0}-v{1}-net7.0-windows-{2}.zip', matrix.assemblyname, env.SemVer, matrix.runtime) }}
+          name: ${{ matrix.assemblyname }}-${{ matrix.framework }}-${{ matrix.runtime }}
+          path: ${{ format('{0}-v{1}-{2}-{3}.zip', matrix.assemblyname, env.SemVer, matrix.framework, matrix.runtime) }}
           if-no-files-found: error
   release:
     needs: [calculate-version, publish]
