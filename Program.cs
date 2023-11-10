@@ -13,7 +13,11 @@ internal sealed class Program
 {
     private const string Resources = "Resources";
     private const string Binaries = "Binaries";
+#if NET8_0
+    private const int DotNetMajorVersion = 8;
+#elif NET7_0
     private const int DotNetMajorVersion = 7;
+#endif
 
     private static readonly Uri XnaDownloadLink = new("https://www.microsoft.com/download/details.aspx?id=27598");
     private static readonly Uri DotNetX64RuntimeDownloadLink = new(FormattableString.Invariant($"https://aka.ms/dotnet/{DotNetMajorVersion}.0/dotnet-runtime-win-x64.exe"));
