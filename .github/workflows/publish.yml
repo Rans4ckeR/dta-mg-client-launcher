@@ -79,10 +79,10 @@ jobs:
           dotnet-version: '8.x.x'
       - name: Publish With Icon
         if: ${{ matrix.iconurl != '' }}
-        run: dotnet publish --configuration Release --no-self-contained -p:PublishSingleFile=true -r ${{ matrix.runtime }} -f ${{ matrix.framework }} -p:DebugType=embedded -p:AssemblyName="${{ matrix.assemblyname }}" -p:ApplicationIcon=mainclienticon.ico -p:AssemblyVersion=$AssemblySemVer -p:FileVersion=$AssemblySemFileVer -p:InformationalVersion=$InformationalVersion
+        run: dotnet publish --configuration Release --no-self-contained -p:PublishSingleFile=true -r ${{ matrix.runtime }} -f ${{ matrix.framework }} -p:DebugType=embedded -p:AssemblyName="${{ matrix.assemblyname }}" -p:ApplicationIcon=mainclienticon.ico -p:AssemblyVersion=${{env.AssemblySemVer}} -p:FileVersion=${{env.AssemblySemFileVer}} -p:InformationalVersion=${{env.InformationalVersion}}
       - name: Publish Without Icon
         if: ${{ matrix.iconurl == '' }}
-        run: dotnet publish --configuration Release --no-self-contained -p:PublishSingleFile=true -r ${{ matrix.runtime }} -f ${{ matrix.framework }} -p:DebugType=embedded -p:AssemblyName="${{ matrix.assemblyname }}" -p:AssemblyVersion=$AssemblySemVer -p:FileVersion=$AssemblySemFileVer -p:InformationalVersion=$InformationalVersion
+        run: dotnet publish --configuration Release --no-self-contained -p:PublishSingleFile=true -r ${{ matrix.runtime }} -f ${{ matrix.framework }} -p:DebugType=embedded -p:AssemblyName="${{ matrix.assemblyname }}" -p:AssemblyVersion=${{env.AssemblySemVer}} -p:FileVersion=${{env.AssemblySemFileVer}} -p:InformationalVersion=${{env.InformationalVersion}}
       - name: Zip
         run: 7z a -r "${{ format('{0}-v{1}-{2}-{3}.zip', matrix.assemblyname, env.SemVer, matrix.framework, matrix.runtime) }}" "./bin/Release/${{ matrix.framework }}/${{ matrix.runtime }}/publish/*.*"
       - name: Upload Artifacts
