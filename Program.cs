@@ -43,6 +43,12 @@ internal sealed class Program
         {
             ApplicationConfiguration.Initialize();
 
+            if (args.Any(q => q.Equals("-RESET", StringComparison.OrdinalIgnoreCase)))
+            {
+                Reset();
+                return;
+            }
+
             if (args.Any(q => q.Equals("-XNA", StringComparison.OrdinalIgnoreCase)))
             {
                 RunXNA();
@@ -136,6 +142,19 @@ internal sealed class Program
         }
 
         RunDX();
+    }
+
+    private static void Reset()
+    {
+        string basePath = FormattableString.Invariant($"{Environment.CurrentDirectory}\\Client\\");
+        var dxFailFile = new FileInfo(FormattableString.Invariant($"{basePath}.dxfail"));
+        var oglFailFile = new FileInfo(FormattableString.Invariant($"{basePath}.oglfail"));
+
+        if (dxFailFile.Exists)
+            dxFailFile.Delete();
+
+        if (oglFailFile.Exists)
+            oglFailFile.Delete();
     }
 
     private static void SetLinkLabelUrl(LinkLabel linkLabel, Uri uri)
