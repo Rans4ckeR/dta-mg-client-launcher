@@ -77,7 +77,7 @@ internal sealed class Program
         }
         catch (Exception ex)
         {
-            MessageBox.Show(ex.ToString(), "Client Launcher Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            _ = MessageBox.Show(ex.ToString(), "Client Launcher Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             Environment.Exit(1);
         }
     }
@@ -173,7 +173,7 @@ internal sealed class Program
 
         if (!File.Exists(absolutePath))
         {
-            MessageBox.Show(
+            _ = MessageBox.Show(
                 FormattableString.CurrentCulture($"Main client library ({relativePath}) not found!"),
                 "Client Launcher Error",
                 MessageBoxButtons.OK,
@@ -192,7 +192,7 @@ internal sealed class Program
         if (!OperatingSystem.IsWindowsVersionAtLeast(6, 2))
             processStartInfo.EnvironmentVariables["DOTNET_EnableWriteXorExecute"] = "0";
 
-        using var _ = Process.Start(processStartInfo);
+        using var __ = Process.Start(processStartInfo);
     }
 
     private static FileInfo CheckAndRetrieveDotNetHost(Architecture architecture, bool runDesktop)

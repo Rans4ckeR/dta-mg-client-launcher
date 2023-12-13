@@ -15,7 +15,7 @@ internal sealed partial class ComponentMissingMessageForm : Form
     {
         using var _ = Process.Start(new ProcessStartInfo
         {
-            FileName = ((Uri)e.Link!.LinkData).ToString(),
+            FileName = ((Uri)e.Link!.LinkData!).ToString(),
             UseShellExecute = true
         });
     }
