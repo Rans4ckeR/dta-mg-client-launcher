@@ -465,4 +465,4 @@ dotnet_style_qualification_for_event = false:warning
 dotnet_diagnostic.CA1036.severity = warning
 dotnet_diagnostic.CA1727.severity = warning
 dotnet_diagnostic.CA1031.severity = suggestion
-dotnet_style_prefer_collection_expression = true:suggestion
+dotnet_style_prefer_collection_expression = when_types_exactly_match:suggestion

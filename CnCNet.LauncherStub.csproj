@@ -7,7 +7,7 @@
     <Description>Launcher for CnCNet Client</Description>
     <Company>CnCNet</Company>
     <Product>CnCNet RS Client Launcher</Product>
-    <Copyright>Copyright © CnCNet, Rampastring 2011-2023</Copyright>
+    <Copyright>Copyright © CnCNet, Rampastring 2011-2024</Copyright>
     <Trademark></Trademark>
     <AssemblyName>CnCNet.LauncherStub</AssemblyName>
     <RootNamespace>CnCNet.LauncherStub</RootNamespace>
@@ -16,7 +16,7 @@
     <AnalysisLevel>latest-all</AnalysisLevel>
     <Nullable>enable</Nullable>
     <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
-    <GenerateDocumentationFile>True</GenerateDocumentationFile>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <ComVisible>false</ComVisible>
     <CLSCompliant>false</CLSCompliant>
     <Platform>AnyCPU</Platform>
@@ -25,7 +25,7 @@
     <RollForward>LatestMajor</RollForward>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="StyleCop.Analyzers" Version="1.2.0-beta.507">
+    <PackageReference Include="StyleCop.Analyzers" Version="1.2.0-beta.556">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
