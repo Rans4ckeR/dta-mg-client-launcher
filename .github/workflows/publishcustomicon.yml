@@ -43,7 +43,7 @@ jobs:
     strategy:
       matrix:
         runtime: [win-x86, win-x64, win-arm64]
-        framework: [net8.0-windows, net7.0-windows]
+        framework: [net9.0-windows, net8.0-windows, net7.0-windows]
     steps:
       - name: Checkout
         uses: actions/checkout@main
@@ -54,9 +54,10 @@ jobs:
       - name: Setup .NET SDK
         uses: actions/setup-dotnet@main
         with:
-          dotnet-version: '8.x.x'
+          dotnet-version: ${{ matrix.framework == 'net9.0-windows' && '9.x.x' || '8.x.x' }}
+          dotnet-quality: ${{ matrix.framework == 'net9.0-windows' && 'preview' || 'ga' }}
       - name: Publish
-        run: dotnet publish CnCNet.LauncherStub.csproj ${{ matrix.framework == 'net7.0-windows' && '-c Release' || '' }} --no-self-contained -p:PublishSingleFile=true -r ${{ matrix.runtime }} -f ${{ matrix.framework }} -p:DebugType=embedded -p:ApplicationIcon=mainclienticon.ico -p:AssemblyVersion=$env:GitVersion_AssemblySemVer -p:FileVersion=$env:GitVersion_AssemblySemFileVer -p:InformationalVersion=$env:GitVersion_InformationalVersion
+        run: dotnet publish CnCNet.LauncherStub.csproj ${{ matrix.framework == 'net7.0-windows' && '-c Release' || '' }} --no-self-contained -p:PublishSingleFile=true -r ${{ matrix.runtime }} -f ${{ matrix.framework }} -p:DebugType=embedded -p:TargetFrameworks=${{ matrix.framework }} -p:ApplicationIcon=mainclienticon.ico -p:AssemblyVersion=$env:GitVersion_AssemblySemVer -p:FileVersion=$env:GitVersion_AssemblySemFileVer -p:InformationalVersion=$env:GitVersion_InformationalVersion
       - name: Upload Artifacts
         uses: actions/upload-artifact@main
         with:

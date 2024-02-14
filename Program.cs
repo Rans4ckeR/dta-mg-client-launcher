@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -13,7 +14,9 @@ internal sealed class Program
 {
     private const string Resources = "Resources";
     private const string Binaries = "Binaries";
-#if NET8_0
+#if NET9_0
+    private const int DotNetMajorVersion = 9;
+#elif NET8_0
     private const int DotNetMajorVersion = 8;
 #elif NET7_0
     private const int DotNetMajorVersion = 7;
@@ -26,7 +29,7 @@ internal sealed class Program
     private static readonly Uri DotNetX86DesktopRuntimeDownloadLink = new(FormattableString.Invariant($"https://aka.ms/dotnet/{DotNetMajorVersion}.0/windowsdesktop-runtime-win-x86.exe"));
     private static readonly Uri DotNetArm64RuntimeDownloadLink = new(FormattableString.Invariant($"https://aka.ms/dotnet/{DotNetMajorVersion}.0/dotnet-runtime-win-arm64.exe"));
     private static readonly Uri DotNetArm64DesktopRuntimeDownloadLink = new(FormattableString.Invariant($"https://aka.ms/dotnet/{DotNetMajorVersion}.0/windowsdesktop-runtime-win-arm64.exe"));
-    private static readonly IReadOnlyDictionary<(Architecture Architecture, bool Desktop), Uri> DotNetDownloadLinks = new Dictionary<(Architecture Architecture, bool Desktop), Uri>
+    private static readonly ReadOnlyDictionary<(Architecture Architecture, bool Desktop), Uri> DotNetDownloadLinks = new Dictionary<(Architecture Architecture, bool Desktop), Uri>
     {
         { (Architecture.X64, false), DotNetX64RuntimeDownloadLink },
         { (Architecture.X64, true), DotNetX64DesktopRuntimeDownloadLink },
@@ -122,6 +125,7 @@ internal sealed class Program
 
                 SetLinkLabelUrl(incompatibleGpuForm.lblXNALink, XnaDownloadLink);
 
+#pragma warning disable IDE0010 // Add missing cases
                 switch (incompatibleGpuForm.ShowDialog())
                 {
                     case DialogResult.No:
@@ -135,6 +139,7 @@ internal sealed class Program
                     case DialogResult.Cancel:
                         return;
                 }
+#pragma warning restore IDE0010 // Add missing cases
             }
 
             RunOGL();
@@ -192,7 +197,9 @@ internal sealed class Program
         if (!OperatingSystem.IsWindowsVersionAtLeast(6, 2))
             processStartInfo.EnvironmentVariables["DOTNET_EnableWriteXorExecute"] = "0";
 
+#pragma warning disable SA1312 // Variable names should begin with lower-case letter
         using var __ = Process.Start(processStartInfo);
+#pragma warning restore SA1312 // Variable names should begin with lower-case letter
     }
 
     private static FileInfo CheckAndRetrieveDotNetHost(Architecture architecture, bool runDesktop)

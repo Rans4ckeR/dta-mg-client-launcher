@@ -39,7 +39,7 @@ jobs:
     strategy:
       matrix:
         runtime: [win-x86, win-x64, win-arm64]
-        framework: [net8.0-windows, net7.0-windows]
+        framework: [net9.0-windows, net8.0-windows, net7.0-windows]
         assemblyname: [CnCNet.LauncherStub, CnCNetYRLauncher, DTA, REClient, TiberianSun, TiberianDawn, SoleSurvivor, TwistedInsurrection, MentalOmegaClient, RRLauncher, CnCReloadedClient, RedAlert, Dune2000, The Second Tiberium War, FWLauncher, Rubicon]
         include:
           - iconurl: https://raw.githubusercontent.com/CnCNet/cncnet-yr-client-package/develop/package/Resources/clienticon.ico
@@ -83,9 +83,10 @@ jobs:
       - name: Setup .NET SDK
         uses: actions/setup-dotnet@main
         with:
-          dotnet-version: '8.x.x'
+          dotnet-version: ${{ matrix.framework == 'net9.0-windows' && '9.x.x' || '8.x.x' }}
+          dotnet-quality: ${{ matrix.framework == 'net9.0-windows' && 'preview' || 'ga' }}
       - name: Publish
-        run: dotnet publish ${{ matrix.framework == 'net7.0-windows' && '-c Release' || '' }} --no-self-contained -p:PublishSingleFile=true -r ${{ matrix.runtime }} -f ${{ matrix.framework }} -p:DebugType=embedded -p:AssemblyName="${{ matrix.assemblyname }}" ${{ matrix.iconurl != '' && '-p:ApplicationIcon=mainclienticon.ico' || '' }} -p:AssemblyVersion=${{env.AssemblySemVer}} -p:FileVersion=${{env.AssemblySemFileVer}} -p:InformationalVersion=${{env.InformationalVersion}}
+        run: dotnet publish ${{ matrix.framework == 'net7.0-windows' && '-c Release' || '' }} --no-self-contained -p:PublishSingleFile=true -r ${{ matrix.runtime }} -f ${{ matrix.framework }} -p:DebugType=embedded -p:TargetFrameworks=${{ matrix.framework }} -p:AssemblyName="${{ matrix.assemblyname }}" ${{ matrix.iconurl != '' && '-p:ApplicationIcon=mainclienticon.ico' || '' }} -p:AssemblyVersion=${{env.AssemblySemVer}} -p:FileVersion=${{env.AssemblySemFileVer}} -p:InformationalVersion=${{env.InformationalVersion}}
       - name: Zip
         run: 7z a -r "${{ format('{0}-v{1}-{2}-{3}.zip', matrix.assemblyname, env.SemVer, matrix.framework, matrix.runtime) }}" "./bin/Release/${{ matrix.framework }}/${{ matrix.runtime }}/publish/*.*" "-x!*.xml"
       - name: Upload Artifacts
